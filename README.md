@@ -7,7 +7,7 @@
   <p>
     <a href="https://tangyx527.github.io/tyx-signature/"><strong>立即在线体验 ↗</strong></a>
     &nbsp; · &nbsp;
-    <a href="assets/showcase/signature-demo.mp4?raw=true">查看原画质 MP4</a>
+    <a href="assets/showcase/signature-demo.mp4?raw=true">查看情侣原画质 MP4</a>
   </p>
 
   <p>
@@ -21,7 +21,7 @@
     <img src="assets/showcase/signature-demo.gif" alt="Taiyang 与 Yuliang 情侣签名的真实导出：开场光点、逐笔书写、猫耳与太阳装饰，以及彩色收尾动画" width="960">
   </picture>
 
-  <p><sub>真实导出示例 · 完整 5 秒 · 1080p / 30 fps 原视频</sub></p>
+  <p><sub>情侣签名真实导出 · 完整 5 秒 · 1080p / 30 fps 原视频</sub></p>
 
 </div>
 
@@ -49,13 +49,24 @@
 
 ## 真实效果
 
-下面的画面均截自上方同一段真实 MP4，展示情侣模式、猫耳与太阳装饰，以及完整的书写与收尾。
+### 单人签名 · 轻巧的小表情
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/showcase/single-poster.webp">
+  <img src="assets/showcase/single-demo.gif" alt="Taiyang 单人签名的真实导出：逐笔书写、白粉色小表情与彩色收尾动画" width="960">
+</picture>
+
+一份笔迹，加一点自己的表情。[查看单人原画质 MP4](assets/showcase/single-demo.mp4?raw=true)。
+
+### 情侣签名 · 从书写到收尾
+
+上方主视觉与下面的关键帧来自同一段情侣 MP4，展示 Taiyang / Yuliang、猫耳与太阳装饰，以及完整的书写与收尾。
 
 | 逐笔写出 | 签名与装饰 | 彩色收尾 |
 | :---: | :---: | :---: |
 | <img src="assets/showcase/writing.webp" alt="真实视频中的逐笔书写画面" width="320"> | <img src="assets/showcase/signature-poster.webp" alt="真实视频中完整的情侣签名、猫耳和太阳" width="320"> | <img src="assets/showcase/outro.webp" alt="真实视频中签名变形后的彩色笔片" width="320"> |
 
-GIF 保留完整首尾，约 1.4 MB；[原画质 MP4](assets/showcase/signature-demo.mp4?raw=true)为 1920 × 1080、30 fps。系统偏好减少动态效果时，主视觉显示静态签名画面。
+两段 GIF 均保留完整首尾；[情侣原画质 MP4](assets/showcase/signature-demo.mp4?raw=true)与单人原视频均为 1920 × 1080、30 fps、5 秒。系统偏好减少动态效果时，动画展示改用静态签名画面。
 
 ## 本地运行与部署
 
