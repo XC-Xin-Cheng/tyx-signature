@@ -53,7 +53,7 @@
 
 | 逐笔写出 | 签名与装饰 | 彩色收尾 |
 | :---: | :---: | :---: |
-| ![真实视频中的逐笔书写画面](assets/showcase/writing.webp) | ![真实视频中完整的情侣签名、猫耳和太阳](assets/showcase/signature-poster.webp) | ![真实视频中签名变形后的彩色笔片](assets/showcase/outro.webp) |
+| <img src="assets/showcase/writing.webp" alt="真实视频中的逐笔书写画面" width="320"> | <img src="assets/showcase/signature-poster.webp" alt="真实视频中完整的情侣签名、猫耳和太阳" width="320"> | <img src="assets/showcase/outro.webp" alt="真实视频中签名变形后的彩色笔片" width="320"> |
 
 GIF 保留完整首尾，约 1.4 MB；[原画质 MP4](assets/showcase/signature-demo.mp4?raw=true)为 1920 × 1080、30 fps。系统偏好减少动态效果时，主视觉显示静态签名画面。
 
