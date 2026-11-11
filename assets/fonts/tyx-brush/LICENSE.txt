@@ -1,0 +1,3 @@
+TYX Brush stroke alphabet
+Original authored vector stroke data, MIT License.
+See the repository LICENSE for the full terms.

@@ -1,0 +1,123 @@
+{
+  "version": 2,
+  "mode": "couple",
+  "people": [
+    {
+      "name": "Taiyang",
+      "scheme": "classic",
+      "position": {
+        "x": 0.03098053332496639,
+        "y": 0.03727046723869283,
+        "scale": 1.5,
+        "rotation": -6
+      },
+      "font": {
+        "family": "tyx-brush",
+        "size": 240,
+        "penWidth": 1.45,
+        "pressure": 0.85,
+        "initialScale": 1.15,
+        "initialOffsetX": 0,
+        "initialOffsetY": 0,
+        "terminalLength": 1
+      },
+      "ink": {
+        "color": "#f5fffd"
+      },
+      "glow": {
+        "enabled": true,
+        "color": "#e9f1ff",
+        "strength": 0.5,
+        "radius": 14
+      },
+      "decoration": {
+        "id": "cat-ears",
+        "scale": 1.35,
+        "offsetX": -0.02985413348703916,
+        "offsetY": -0.018246022602424194,
+        "action": "wink",
+        "earFold": true,
+        "playful": true
+      },
+      "underline": {
+        "enabled": false,
+        "lift": true
+      },
+      "comet": {
+        "enabled": true,
+        "color": "#6de9de",
+        "size": 1.6
+      }
+    },
+    {
+      "name": "Yuliang",
+      "scheme": "classic",
+      "position": {
+        "x": -0.034334763948497854,
+        "y": -0.010195953480962252,
+        "scale": 1.5,
+        "rotation": -6
+      },
+      "font": {
+        "family": "tyx-brush",
+        "size": 240,
+        "penWidth": 0.95,
+        "pressure": 0.85,
+        "initialScale": 1.15,
+        "initialOffsetX": 0,
+        "initialOffsetY": 0,
+        "terminalLength": 1
+      },
+      "ink": {
+        "color": "#ffc0dc"
+      },
+      "glow": {
+        "enabled": true,
+        "color": "#f48cbd",
+        "strength": 0.5,
+        "radius": 14
+      },
+      "decoration": {
+        "id": "sun",
+        "scale": 0.7,
+        "offsetX": 0.07582260371959945,
+        "offsetY": 0.10705751155010357,
+        "action": "wink",
+        "earFold": true,
+        "playful": true
+      },
+      "underline": {
+        "enabled": false,
+        "lift": true
+      },
+      "comet": {
+        "enabled": true,
+        "color": "#f38bc5",
+        "size": 1.6
+      }
+    }
+  ],
+  "canvas": {
+    "aspect": "landscape",
+    "background": "#000000"
+  },
+  "timing": {
+    "duration": 5,
+    "writingRatio": 0.4,
+    "hold": 0.9
+  },
+  "animation": {
+    "introOutroEnabled": true
+  },
+  "effects": {
+    "sparkles": false,
+    "hearts": false,
+    "intensity": 0
+  },
+  "audio": {
+    "start": 0,
+    "volume": 0.7,
+    "fadeIn": 0.15,
+    "fadeOut": 0.35
+  }
+}

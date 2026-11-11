@@ -1,0 +1,31 @@
+tyx-signature — runtime and asset licenses
+
+The project's MIT license does not replace the rights or licenses of third-party content.
+Project license: licenses/tyx-signature-MIT.txt
+
+React / React DOM / Scheduler — MIT
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licenses: licenses/React-MIT.txt and licenses/React-DOM-MIT.txt
+Scheduler uses the same license text as React DOM.
+Source: https://github.com/facebook/react
+
+Zod — MIT
+Copyright (c) 2025 Colin McDonnell
+License: licenses/Zod-MIT.txt
+Source: https://github.com/colinhacks/zod
+
+Mediabunny 1.56.1 — Mozilla Public License 2.0
+License: licenses/Mediabunny-MPL-2.0.txt
+Corresponding Source Code Form, available under MPL-2.0:
+https://registry.npmjs.org/mediabunny/-/mediabunny-1.56.1.tgz
+Source: https://github.com/Vanilagy/mediabunny
+
+Geist Sans variable font, geist 1.9.2 — SIL Open Font License 1.1
+Copyright (c) 2023 Vercel, in collaboration with basement.studio
+License: licenses/Geist-OFL-1.1.txt
+Source: https://github.com/vercel/geist-font
+
+Phosphor Icons 2.1.1, regular weight — MIT
+Copyright (c) 2023 Phosphor Icons
+License: licenses/Phosphor-Icons-MIT.txt
+Source: https://github.com/phosphor-icons/core

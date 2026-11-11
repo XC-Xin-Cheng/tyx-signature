@@ -1,0 +1,33 @@
+{
+  "name": "tyx-signature",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "原创连笔签名与情侣动态签名，纯浏览器设计与 MP4 导出。",
+  "engines": {
+    "node": ">=22.14 <25"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "start": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "check": "tsc --noEmit",
+    "test": "tsx --test tests/web-*.test.ts tests/config.test.ts tests/motion.test.ts tests/brush.test.ts"
+  },
+  "dependencies": {
+    "mediabunny": "1.56.1",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.9",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vite": "8.3.6"
+  }
+}

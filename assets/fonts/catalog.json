@@ -1,0 +1,160 @@
+[
+  {
+    "id": "tangerine",
+    "label": "Tangerine",
+    "kind": "outline",
+    "family": "Tangerine Tegaki 3dc76002",
+    "filename": "tangerine-3dc76002.ttf",
+    "weights": [
+      400
+    ],
+    "penWidthRange": [
+      1,
+      1
+    ],
+    "coverage": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,;:!?'\"-()/\\@#$%&*+=<>~`^_|",
+    "license": "OFL-1.1",
+    "licenseFile": "OFL.txt",
+    "source": "https://registry.npmjs.org/tegaki/-/tegaki-1.1.0.tgz#package/fonts/tangerine",
+    "metrics": {
+      "unitsPerEm": 1000,
+      "ascender": 750,
+      "descender": -250
+    },
+    "files": [
+      {
+        "file": "glyphData.json",
+        "sha256": "c9ff67a5d4c5af6661ba9d1f7f4c382cf663eb4263246a4f5870c37eb754a1b9"
+      },
+      {
+        "file": "OFL.txt",
+        "sha256": "adadb8d5d34fe2218dca0f4a4919a9b6f81dfaebb289e5446ac7b3063d6965e9"
+      },
+      {
+        "file": "tangerine-3dc76002.ttf",
+        "sha256": "7ec597ba27094b7329bff897012e2ca909ea7df8c3369abbe9067394c4970308"
+      },
+      {
+        "file": "tangerine.ttf",
+        "sha256": "bf122bc56965760a9d898341fa151db9bdde3aa0827bfe07373b52d943d03603"
+      }
+    ],
+    "referenceRepository": "https://github.com/gkurt/tegaki",
+    "reviewStatus": "not-yet-visually-reviewed"
+  },
+  {
+    "id": "italianno",
+    "label": "Italianno",
+    "kind": "outline",
+    "family": "Italianno Tegaki 3dc76002",
+    "filename": "italianno-3dc76002.ttf",
+    "weights": [
+      400
+    ],
+    "penWidthRange": [
+      1,
+      1
+    ],
+    "coverage": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,;:!?'\"-()/\\@#$%&*+=<>~`^_|",
+    "license": "OFL-1.1",
+    "licenseFile": "OFL.txt",
+    "source": "https://registry.npmjs.org/tegaki/-/tegaki-1.1.0.tgz#package/fonts/italianno",
+    "metrics": {
+      "unitsPerEm": 1000,
+      "ascender": 800,
+      "descender": -450
+    },
+    "files": [
+      {
+        "file": "glyphData.json",
+        "sha256": "ac62e575ba9c08271ed0ff6a35a7db55a79a9534cb175a301e4bd3261b2e6adf"
+      },
+      {
+        "file": "glyphDataById.json",
+        "sha256": "57dc8e6a57d3c14b0f46d3f54a4c2e13bbe6ec027914e9ef57cef8b1e5d0105f"
+      },
+      {
+        "file": "italianno-3dc76002.ttf",
+        "sha256": "20b6e9d5de17e0ea57513a81756ea24eb38537cc03d05b38377bf05c660eb862"
+      },
+      {
+        "file": "italianno.ttf",
+        "sha256": "8b9f528dfeccad7f1572ee10d50823cae5105b8ed69f71b124684c834b940a07"
+      },
+      {
+        "file": "OFL.txt",
+        "sha256": "bce79721f0203586872bbd7016922baf449980bdd1c44550a821112a3b547185"
+      }
+    ],
+    "referenceRepository": "https://github.com/gkurt/tegaki",
+    "reviewStatus": "not-yet-visually-reviewed"
+  },
+  {
+    "id": "ems-allure",
+    "label": "EMS Allure",
+    "kind": "stroke",
+    "family": "EMS Allure Tegaki 14aaaz",
+    "filename": "ems-allure.otf",
+    "weights": [
+      400
+    ],
+    "penWidthRange": [
+      0.5,
+      2
+    ],
+    "coverage": "0123456789!\"#$%&'()*+,-./:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¥¦¨©ª«®°±²³´·¹º»¼½¾¿ÀÁÂÃÄÅÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝàáâãäåèéêëìíîïñòóôõö÷øùúûüýÿ–—“”‹›€ŸĂĔĞĬŎŬăĕğĭŏŭĆćĐđČčŠšŽžßşÇæŞİ˘Æıç¸",
+    "license": "OFL-1.1",
+    "licenseFile": "LICENSE.txt",
+    "source": "https://registry.npmjs.org/tegaki/-/tegaki-1.1.0.tgz#package/fonts/ems-allure",
+    "metrics": {
+      "unitsPerEm": 1000,
+      "ascender": 1102,
+      "descender": -446
+    },
+    "files": [
+      {
+        "file": "ems-allure.otf",
+        "sha256": "f91c93d0e3dd1a098a0aef275143508e2fe06552c7a049a5432abd1d9d88d2ae"
+      },
+      {
+        "file": "glyphData.json",
+        "sha256": "5b2fc0070af4fb9218da84e18427dd8def20920fcfe4a6bf7d460252daa03207"
+      },
+      {
+        "file": "LICENSE.txt",
+        "sha256": "7ac563210eb5dbd68a808f42dbcd14988667efa7b4f11b7b1621f635038d2166"
+      }
+    ],
+    "referenceRepository": "https://github.com/gkurt/tegaki",
+    "reviewStatus": "not-yet-visually-reviewed"
+  },
+  {
+    "id": "tyx-brush",
+    "label": "TYX Brush · 连笔笔刷",
+    "kind": "stroke",
+    "family": "TYX Brush",
+    "filename": "positional.ts",
+    "weights": [
+      400
+    ],
+    "penWidthRange": [
+      0.5,
+      2
+    ],
+    "coverage": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'-",
+    "license": "MIT",
+    "licenseFile": "LICENSE.txt",
+    "source": "./tyx-brush/positional.ts",
+    "metrics": {
+      "unitsPerEm": 320,
+      "ascender": 240,
+      "descender": -190
+    },
+    "files": [
+      {
+        "file": "positional.ts",
+        "sha256": "28bec5e038feda440fc1b756841f8664c9a33496b1592fb2dd1166460f5285fd"
+      }
+    ]
+  }
+]
