@@ -6,6 +6,7 @@ import {Preview} from './Preview';
 import {ColorField,Details,Icon,Range,Section,Toggle,UtilityMenu} from './ui';
 import {MorphNav} from './MorphNav';
 import {DecorationThumbnail} from './DecorationThumbnail';
+import {ThemeSelector} from './ThemeSelector';
 import {categoryForDecoration,decorationCatalog,decorationCategories,type DecorationCategory} from './decoration-catalog';
 import './style.css';
 
@@ -131,6 +132,7 @@ function App(){
       <div className="brand"><span className="brand-mark"><Icon name="pen" size={22}/></span><div className="brand-copy"><h1 className="brand-title">tyx <span>· 签名动画</span></h1><span className="brand-subtitle">把名字，写成自己的样子</span></div></div>
       <div className="top-actions">
         <span className="save-state" role="status" aria-label={saved} title={saved}><span className={['save-dot',prepared.error?'is-unsaved':''].join(' ')} aria-hidden="true"/><span className="save-state-label">{saved}</span></span>
+        <ThemeSelector/>
         <UtilityMenu>
           <button disabled={busy||!!prepared.error} onClick={()=>downloadText(JSON.stringify(validateConfig(config),null,2),'tyx-signature.json')}><Icon name="file" size={15}/>下载配置</button>
           <button disabled={busy} onClick={()=>importInput.current?.click()}><Icon name="upload" size={15}/>导入配置</button>
