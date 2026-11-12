@@ -1,6 +1,6 @@
 import {buildBrush,brushProgress,parseStroke,type BrushStroke} from '../src/brush';
 import {pointAt,pointBounds,sampleCubic,type Box,type Curve,type Point} from '../src/geometry';
-import {initials,middle,endings,metrics,type PenGlyph} from '../assets/fonts/tyx-brush/positional';
+import {initials,middle,endings,symbols,metrics,type PenGlyph} from '../assets/fonts/tyx-brush/positional';
 import type {SignatureConfig} from '../src/config';
 import type {Scheme} from './model';
 
@@ -28,7 +28,7 @@ function originalLetterStrokes(config:SignatureConfig):{strokes:BrushStroke[];gu
   if(char===' '){cursor+=62*factor;return;}
   const cap=initials[char],base=middle[char],isLead=index===first;
   const position:BrushStroke['position']=cap&&isLead?'initial':base&&index===last?'terminal':cap||base?'medial':'punctuation';
-  const glyph:PenGlyph=cap??base??(char==="'"?{advance:38,paths:['M 20 -157 C 28 -167 30 -181 29 -186']}:{advance:65,paths:['M 0 -57 C 19 -60 44 -60 65 -57']});
+  const glyph:PenGlyph=symbols[char]??cap??base??(char==="'"?{advance:38,paths:['M 20 -157 C 28 -167 30 -181 29 -186']}:{advance:65,paths:['M 0 -57 C 19 -60 44 -60 65 -57']});
   const scale=isLead?config.font.initialScale:cap?.79:1,paths=[...(position==='terminal'&&glyph.terminalPaths?glyph.terminalPaths:glyph.paths)];
   if(position==='terminal'){
    const ending=endings[char],bare=parseStroke(paths[ending.stroke]),anchor=bare.points.at(-1)!,reach=config.font.terminalLength*Math.min(1,.55+characters.filter(ch=>/[A-Za-z]/.test(ch)).length*.075);
@@ -52,7 +52,7 @@ function originalLetterStrokes(config:SignatureConfig):{strokes:BrushStroke[];gu
   if(terminal){const anchor=pointAt(terminal.curve,.84);terminal.curve=transformCurve(terminal.curve,p=>p.length<terminal.curve.length*.84?p:{x:anchor.x+(p.x-anchor.x)*config.font.terminalLength,y:anchor.y+(p.y-anchor.y)*(.75+.25*config.font.terminalLength)});}
  }
  strokes.push(...dots);
- return {strokes,guide:{baseline:0,xHeight:metrics.xHeight*factor,hasDescenders:strokes.some(s=>/[fgjpqxyz]/.test(s.char)),bodyStart:0,bodyEnd:cursor}};
+ return {strokes,guide:{baseline:0,xHeight:metrics.xHeight*factor,hasDescenders:strokes.some(s=>/[fgjpqxyz,;]/.test(s.char)),bodyStart:0,bodyEnd:cursor}};
 }
 
 /** Prepare timed TYX strokes with deterministic pressure samples. */

@@ -141,7 +141,7 @@
       0.5,
       2
     ],
-    "coverage": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'-",
+    "coverage": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,:;!?'\"-&/$@#%+=*~_()<>[]{}|\\^`",
     "license": "MIT",
     "licenseFile": "LICENSE.txt",
     "source": "./tyx-brush/positional.ts",
@@ -153,7 +153,7 @@
     "files": [
       {
         "file": "positional.ts",
-        "sha256": "28bec5e038feda440fc1b756841f8664c9a33496b1592fb2dd1166460f5285fd"
+        "sha256": "95310a82ba2479aea288e83cb4c653f8ee68a2b7fae8b12614a3672c2f72dd73"
       }
     ]
   }

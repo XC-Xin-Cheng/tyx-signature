@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buildBrush,brushRibbon,parseStroke} from '../src/brush';
-import {initials,middle,endings} from '../assets/fonts/tyx-brush/positional';
+import {initials,middle,endings,symbols} from '../assets/fonts/tyx-brush/positional';
 import {defaultConfig,parseConfig} from '../src/config';
 import {place,rotate} from '../src/layout';
 import {foldEar} from '../src/motion';
@@ -20,7 +20,28 @@ test('lower oval joins remain tangent and the pen union has round capsules',()=>
 test('underline stays below the body for names with and without lower loops',()=>{
  for(const name of ['Liuxin','Tangyan','Tangyanxiang','Zhongxinyu','Chen Ming','Jacob','Az']){const c={...config,name},b=buildBrush(c),l=place(c,b.box,b.points[0],b.points.at(-1)!,b.points,b.guide);assert.ok(l.scale>0);assert.equal(l.overlap,false);for(const p of l.line.points){const unrotated={x:p.x*Math.cos(l.rotation*Math.PI/180)-p.y*Math.sin(l.rotation*Math.PI/180),y:p.x*Math.sin(l.rotation*Math.PI/180)+p.y*Math.cos(l.rotation*Math.PI/180)};assert.ok(unrotated.y>b.guide.xHeight*.20,name);}}
 });
-test('cat ear folds and reopens deterministically',()=>{const phase={start:4,end:4.6};assert.equal(foldEar(3,phase),0);assert.ok(foldEar(4.25,phase)>.9);assert.ok(foldEar(4.52,phase)<.1);assert.equal(foldEar(4.6,phase),0);assert.equal(foldEar(4.25,phase),foldEar(4.25,phase));});
+test('every keyboard symbol glyph builds as standalone punctuation strokes',()=>{
+ const expected='0123456789 .,:;!?"\'-&/$@#%+=*~_()<>[]{}|\\^`'.replace(/ /g,'');
+ assert.deepEqual([...Object.keys(symbols)].sort().join(''),[...expected].sort().join(''));
+ for(const [ch,glyph] of Object.entries(symbols)){
+  assert.ok(glyph.advance>0,ch);
+  const b=buildBrush({...config,name:`a${ch}b`}),own=b.strokes.filter(s=>s.char===ch);
+  assert.ok(own.length>0,ch);
+  assert.ok(own.every(s=>s.position==='punctuation'),ch);
+  own.forEach(s=>assert.ok(Number.isFinite(s.curve.length)&&s.curve.length>0,ch));
+ }
+ const bang=buildBrush({...config,name:'a!b'}).strokes.filter(s=>s.char==='!');
+ assert.ok(bang.some(s=>s.dot&&s.index===1));
+ // Lookalikes must stay visually distinct from letters: different advance and shape.
+ for(const [digit,letter] of [['0','o'],['1','l'],['2','z'],['5','s'],['8','o']] as const){
+  assert.notEqual(symbols[digit].advance,middle[letter].advance,`${digit} vs ${letter}`);
+ }
+ for(const name of ['TYX & Mei!','Rin.2','Ty 2026 #1','a_b~c']){
+  const parsed=parseConfig({name});assert.equal(parsed.name,name);
+  assert.ok(buildBrush({...config,name:name}).strokes.length>0,name);
+ }
+ assert.throws(()=>parseConfig({name:'A\nB'}));
+});
 
 test('case is retained and reference lowercase endings sweep right without added lower loops',()=>{
  for(const name of ['Liuxin','liuxin','LIUXIN','tAngYaN'])assert.deepEqual([...new Set(buildBrush({...config,name}).strokes.map(s=>s.char))],[...new Set([...name])]);

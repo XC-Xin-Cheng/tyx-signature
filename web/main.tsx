@@ -47,7 +47,7 @@ function App(){
   if(prepared.scene)lastGood.current=prepared.scene;
   const scene=prepared.scene??lastGood.current,person=config.people[selected];
   const busy=job.status==='checking'||job.status==='working';
-  const invalidName=!/[a-z]/i.test(person.name)||!/^[A-Za-z '\-]+$/.test(person.name);
+  const invalidName=!/[a-z]/i.test(person.name)||!/^[ -~]+$/.test(person.name);
   const update=(fn:(next:WebConfig)=>void)=>setConfig(current=>{const next=structuredClone(current);fn(next);return next;});
   const changePerson=(fn:(next:PersonConfig)=>void)=>update(next=>fn(next.people[selected]));
   useEffect(()=>{const category=categoryForDecoration(person.decoration.id);if(category)setDecorationCategory(category);},[selected,person.decoration.id]);
@@ -150,7 +150,7 @@ function App(){
               {personPicker}
               <Section title={config.mode==='couple'?(selected===0?'第一位的签名':'第二位的签名'):'写下你的名字'} icon="pen">
                 <label className="field"><span className="field-label">英文名字或拼音</span><input className="name-input" aria-label="签名姓名" aria-invalid={invalidName} aria-describedby={invalidName?'signature-name-error':undefined} value={person.name} maxLength={40} placeholder="例如 TYX、Li Xin" spellCheck={false} autoComplete="off" onChange={event=>changePerson(next=>{next.name=event.target.value;})}/></label>
-                {invalidName&&<p className="field-error caption-4" id="signature-name-error">请输入英文字母或拼音，可保留空格、撇号和连字符。</p>}
+                {invalidName&&<p className="field-error caption-4" id="signature-name-error">请输入英文字母、数字或键盘符号，至少包含一个字母。</p>}
               </Section>
               <ColorField key={'signature-color-'+selected} title="签名颜色" value={person.ink.color} editable onChange={value=>changePerson(next=>{next.ink.color=value;next.glow.color=value;})}/>
               <div className="two-field-row">

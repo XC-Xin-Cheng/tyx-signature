@@ -33,7 +33,7 @@ export const webSchema = z.object({
   for(let i=0;i<(c.mode==='couple'?2:1);i++){
     const name=c.people[i].name,prefix=c.mode==='couple'?`${i===0?'第一':'第二'}位：`:'';
     if(!name||!/[a-z]/i.test(name))ctx.addIssue({code:'custom',path:['people',i,'name'],message:`${prefix}至少输入一个英文字母`});
-    else if(!/^[A-Za-z '\-]+$/.test(name))ctx.addIssue({code:'custom',path:['people',i,'name'],message:`${prefix}请使用英文字母、空格、英文撇号或连字符`});
+    else if(!/^[ -~]+$/.test(name))ctx.addIssue({code:'custom',path:['people',i,'name'],message:`${prefix}请使用键盘可输入的英文字母、数字与符号`});
   }
   if(c.timing.duration-c.timing.hold<2)ctx.addIssue({code:'custom',path:['timing','hold'],message:'请为书写和收尾保留至少 2 秒，缩短定格或增加总时长'});
 });

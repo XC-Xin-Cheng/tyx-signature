@@ -1,5 +1,5 @@
 import React,{useMemo} from 'react';
-import {initials,middle,endings,metrics,type PenGlyph} from '../assets/fonts/tyx-brush/positional';
+import {initials,middle,endings,symbols,metrics,type PenGlyph} from '../assets/fonts/tyx-brush/positional';
 import {pointAt,pathOf,pointBounds,type Curve,type Point,type Box} from './geometry';
 import {sampleCubic} from './geometry';
 import {writingTiming} from './timeline';
@@ -21,7 +21,7 @@ export function buildBrush(c:SignatureConfig){
   if(char===' '){cursor+=62*factor;return;}
   const cap=initials[char],base=middle[char];
   const position:BrushStroke['position']=cap&&i===first?'initial':base&&i===last?'terminal':cap||base?'medial':'punctuation';
-  const glyph:PenGlyph=cap??base??(char==="'"?{advance:38,paths:['M 20 -157 C 28 -167 30 -181 29 -186']}:{advance:65,paths:['M 0 -57 C 19 -60 44 -60 65 -57']});
+  const glyph:PenGlyph=symbols[char]??cap??base??(char==="'"?{advance:38,paths:['M 20 -157 C 28 -167 30 -181 29 -186']}:{advance:65,paths:['M 0 -57 C 19 -60 44 -60 65 -57']});
   const isLead=i===first;
   const capScale=isLead?c.font.initialScale:cap?.79:1;
   const paths=[...(position==='terminal'&&glyph.terminalPaths?glyph.terminalPaths:glyph.paths)];
@@ -58,7 +58,7 @@ export function buildBrush(c:SignatureConfig){
  for(const s of strokes){s.start=clock;clock+=s.duration+.006;}
  const points:Point[]=strokes.flatMap(s=>s.curve.points.flatMap(p=>[{x:p.x-s.width/2,y:p.y-s.width/2},{x:p.x+s.width/2,y:p.y+s.width/2}]));
  const box=pointBounds(points);
- return {strokes,points,box,duration:clock,guide:{baseline:0,xHeight:metrics.xHeight*factor,hasDescenders:strokes.some(s=>/[fgjpqxyz]/.test(s.char)||(s.position==='terminal'&&s.char==='b')),bodyStart:0,bodyEnd:cursor}};
+ return {strokes,points,box,duration:clock,guide:{baseline:0,xHeight:metrics.xHeight*factor,hasDescenders:strokes.some(s=>/[fgjpqxyz,;]/.test(s.char)||(s.position==='terminal'&&s.char==='b')),bodyStart:0,bodyEnd:cursor}};
 }
 function pressure(s:BrushStroke,u:number,c:SignatureConfig){
  const before=pointAt(s.curve,Math.max(0,u-.014)),after=pointAt(s.curve,Math.min(1,u+.014)),dy=after.y-before.y,len=Math.hypot(after.x-before.x,dy)||1;
