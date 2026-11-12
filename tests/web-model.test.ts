@@ -43,12 +43,31 @@ test('all output aspects are even 1080p frames and the brush adapter selects ori
 
 test('defaults clone the default design and never share nested state',()=>{
   const first=defaultWebConfig();
-  assert.deepEqual(first,defaultDesign);
+  const expected={...structuredClone(defaultDesign),canvas:{...defaultDesign.canvas,transparent:false}};
+  assert.deepEqual(first,expected);
   assert.deepEqual(defaultPerson(1),defaultDesign.people[1]);
   first.people[0].name='Changed';first.people[0].position.x=.2;first.people[0].decoration.scale=.5;first.audio.volume=0;
   const person=defaultPerson();person.ink.color='#000000';
-  assert.deepEqual(defaultWebConfig(),defaultDesign);
+  assert.deepEqual(defaultWebConfig(),expected);
   assert.deepEqual(defaultPerson(),defaultDesign.people[0]);
+});
+
+test('saved designs and imported files without transparency default to an opaque canvas without changing their content',()=>{
+  const text=JSON.stringify(defaultDesign),expected={...structuredClone(defaultDesign),canvas:{...defaultDesign.canvas,transparent:false}};
+  assert.deepEqual(parseConfigFile(text),expected);
+  for(const key of [STORAGE_KEY,'tyx-signature.website.v6']){
+    const loaded=loadConfig({getItem:requested=>requested===key?text:null});
+    assert.equal(loaded.warning,undefined);assert.deepEqual(loaded.config,expected);
+  }
+  assert.equal('transparent' in defaultDesign.canvas,false,'the saved default artwork remains unchanged');
+});
+
+test('transparency round trips through files and storage while retaining names, paint, timing and placement',()=>{
+  const c=defaultWebConfig();c.canvas.transparent=true;c.canvas.background='#7451a3';c.people[0].name="J-Anne O'Neil";c.people[1].name='QX';c.people[0].position.x=.11;c.people[1].position.y=-.07;c.people[0].font.penWidth=1.2;c.people[1].ink.color='#ffc1d8';
+  const original=structuredClone(c);let saved='';saveConfig({setItem:(key,value)=>{assert.equal(key,STORAGE_KEY);saved=value;}},c);
+  assert.deepEqual(c,original);assert.equal(JSON.parse(saved).canvas.transparent,true);assert.deepEqual(parseConfigFile(saved),original);assert.deepEqual(loadConfig({getItem:key=>key===STORAGE_KEY?saved:null}).config,original);
+  const adapted=asBrushConfig(c.people[0],c);assert.equal(adapted.background.mode,'transparent');assert.equal(adapted.background.color,c.canvas.background);
+  for(const value of ['true',1,null])assert.throws(()=>validateConfig({...c,canvas:{...c.canvas,transparent:value}}));
 });
 
 test('every active decoration survives independent-person file and storage round trips',()=>{

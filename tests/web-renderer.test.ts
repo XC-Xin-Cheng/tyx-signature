@@ -33,7 +33,7 @@ type Matrix=[number,number,number,number,number,number];
 type Paint={color:string;alpha:number;shadow:number;matrix:Matrix;commands:Command[]};
 class CanvasRecorder{
  fillStyle='#000000';strokeStyle='#000000';shadowColor='#000000';shadowBlur=0;globalAlpha=1;globalCompositeOperation='source-over';lineWidth=1;lineCap='butt';lineJoin='miter';
- matrix:Matrix=[1,0,0,1,0,0];path=new RecordedPath();fills:Paint[]=[];strokes:Paint[]=[];backgrounds:{color:string;args:number[]}[]=[];stack:Record<string,unknown>[]=[];
+ matrix:Matrix=[1,0,0,1,0,0];path=new RecordedPath();fills:Paint[]=[];strokes:Paint[]=[];backgrounds:{color:string;args:number[]}[]=[];clears:{args:number[];matrix:Matrix}[]=[];operations:string[]=[];stack:Record<string,unknown>[]=[];
  setTransform(a:number,b:number,c:number,d:number,e:number,f:number){this.matrix=[a,b,c,d,e,f];}
  transform(a:number,b:number,c:number,d:number,e:number,f:number){const [x,y,z,w,u,v]=this.matrix;this.matrix=[x*a+z*b,y*a+w*b,x*c+z*d,y*c+w*d,x*e+z*f+u,y*e+w*f+v];}
  translate(x:number,y:number){this.transform(1,0,0,1,x,y);}
@@ -48,20 +48,22 @@ class CanvasRecorder{
  quadraticCurveTo(...args:number[]){this.path.quadraticCurveTo(...args);}
  closePath(){this.path.closePath();}
  paint(path:RecordedPath,color:string):Paint{return {color,alpha:this.globalAlpha,shadow:this.shadowBlur,matrix:[...this.matrix],commands:path.commands.map(command=>[...command])};}
- fill(path=this.path){this.fills.push(this.paint(path,this.fillStyle));}
- stroke(){this.strokes.push(this.paint(this.path,this.strokeStyle));}
- fillRect(...args:number[]){this.backgrounds.push({color:this.fillStyle,args});}
+ fill(path=this.path){this.operations.push('fill');this.fills.push(this.paint(path,this.fillStyle));}
+ stroke(){this.operations.push('stroke');this.strokes.push(this.paint(this.path,this.strokeStyle));}
+ clearRect(...args:number[]){this.operations.push('clear');this.clears.push({args,matrix:[...this.matrix]});}
+ fillRect(...args:number[]){this.operations.push('background');this.backgrounds.push({color:this.fillStyle,args});}
 }
 const originalPath=Object.getOwnPropertyDescriptor(globalThis,'Path2D');
 Object.defineProperty(globalThis,'Path2D',{value:RecordedPath,writable:true,configurable:true});
 test.after(()=>{if(originalPath)Object.defineProperty(globalThis,'Path2D',originalPath);else Reflect.deleteProperty(globalThis,'Path2D');});
 function recording(width=180,height=112){
  const context=new CanvasRecorder();
+ const requests:{type:string;options?:CanvasRenderingContext2DSettings}[]=[];
  // Only the Canvas calls exercised by the renderer are implemented here.
- const canvas={width,height,getContext:()=>context} as unknown as HTMLCanvasElement;
- return {canvas,context};
+ const canvas={width,height,getContext:(type:string,options?:CanvasRenderingContext2DSettings)=>{requests.push({type,options});return context;}} as unknown as HTMLCanvasElement;
+ return {canvas,context,requests};
 }
-function frameHash(scene:ReturnType<typeof prepareScene>,time:number,complete=false){const {canvas,context}=recording();renderScene(canvas,scene,time,complete);return createHash('sha256').update(JSON.stringify({fills:context.fills,strokes:context.strokes,backgrounds:context.backgrounds})).digest('hex');}
+function frameHash(scene:ReturnType<typeof prepareScene>,time:number,complete=false){const {canvas,context}=recording();renderScene(canvas,scene,time,complete);return createHash('sha256').update(JSON.stringify({fills:context.fills,strokes:context.strokes,backgrounds:context.backgrounds,clears:context.clears})).digest('hex');}
 
 test('unit-scale names fit each artboard; deliberate enlargement warns instead of recentering',()=>{
  for(const aspect of ['landscape','portrait','square'] as const)for(const names of [['A','X'],['TYX','SM'],['M'.repeat(40),'i'],['Liuxin','Tangyanxiang']])for(const mode of ['single','couple'] as const){
@@ -109,7 +111,34 @@ test('solid and accent geometry survive into the continuous source mesh and comp
 });
 
 test('chosen background persists through writing, morph, final fade and complete editing pose',()=>{
- for(const background of ['#ffffff','#7c3a80','#111820'])for(const enabled of [true,false]){const c=fixture();c.canvas.background=background;c.animation.introOutroEnabled=enabled;c.people[0].decoration.id='face-sleepy';const scene=prepareScene(c);for(const time of [0,.8,scene.editingTime,scene.duration-.5,scene.duration]){const r=recording();renderScene(r.canvas,scene,time);assert.deepEqual(r.context.backgrounds,[{color:background,args:[0,0,scene.width,scene.height]}]);}const r=recording();renderScene(r.canvas,scene,scene.duration,true);assert.equal(r.context.backgrounds[0].color,background);assert.ok(r.context.fills.some(fill=>fill.commands.length>0));}
+ for(const background of ['#ffffff','#7c3a80','#111820'])for(const enabled of [true,false]){const c=fixture();c.canvas.background=background;c.animation.introOutroEnabled=enabled;c.people[0].decoration.id='face-sleepy';const scene=prepareScene(c);for(const time of [0,.8,scene.editingTime,scene.duration-.5,scene.duration]){const r=recording();renderScene(r.canvas,scene,time);assert.deepEqual(r.context.backgrounds,[{color:background,args:[0,0,scene.width,scene.height]}]);assert.deepEqual(r.context.clears,[{args:[0,0,scene.width,scene.height],matrix:[1,0,0,1,0,0]}]);assert.deepEqual(r.context.operations.slice(0,2),['clear','background']);assert.equal(r.requests[0].options?.alpha,true);}const r=recording();renderScene(r.canvas,scene,scene.duration,true);assert.equal(r.context.backgrounds[0].color,background);assert.ok(r.context.fills.some(fill=>fill.commands.length>0));}
+});
+
+test('transparent scenes clear every frame without painting a backdrop through intro, writing, outro and complete pose',()=>{
+ for(const enabled of [true,false]){
+  const c=fixture();c.canvas.transparent=true;c.canvas.background='#7c3a80';c.animation.introOutroEnabled=enabled;c.people[0].decoration.id='face-sleepy';const scene=prepareScene(c),r=recording(scene.width,scene.height),times=[0,.8,(scene.people[0].plan.writing.start+scene.people[0].plan.writing.end)/2,scene.editingTime,scene.duration-.5,scene.duration];
+  for(const time of times){
+   const clears=r.context.clears.length,operation=r.context.operations.length,fills=r.context.fills.length;renderScene(r.canvas,scene,time);
+   assert.equal(r.context.clears.length,clears+1);assert.deepEqual(r.context.clears.at(-1),{args:[0,0,scene.width,scene.height],matrix:[1,0,0,1,0,0]});assert.equal(r.context.operations[operation],'clear');assert.equal(r.context.backgrounds.length,0);
+   if(enabled&&time===scene.duration)assert.equal(r.context.fills.length,fills,'the final faded frame is left transparent');
+  }
+  const before=r.context.fills.length,clears=r.context.clears.length;renderScene(r.canvas,scene,scene.duration,true);assert.equal(r.context.clears.length,clears+1);assert.equal(r.context.backgrounds.length,0);assert.ok(r.context.fills.slice(before).some(fill=>fill.commands.length>0),'complete editing pose retains actual ink');assert.ok(r.requests.every(request=>request.type==='2d'&&request.options?.alpha===true));
+ }
+});
+
+test('the same alpha canvas can switch opaque and transparent without retaining its old background',()=>{
+ const c=fixture();c.canvas.background='#e2d5f1';c.people[0].decoration.id='paw-beans';const opaque=prepareScene(c);c.canvas.transparent=true;const transparent=prepareScene(c),r=recording(opaque.width,opaque.height);
+ for(const [scene,backgrounds] of [[opaque,1],[transparent,1],[opaque,2],[transparent,2]] as const){const clears=r.context.clears.length;renderScene(r.canvas,scene,scene.duration,true);assert.equal(r.context.clears.length,clears+1);assert.equal(r.context.backgrounds.length,backgrounds);}
+ assert.ok(r.requests.every(request=>request.options?.alpha===true));assert.deepEqual(r.context.backgrounds.map(fill=>fill.color),['#e2d5f1','#e2d5f1']);
+ const expected=structuredClone(opaque.config);expected.canvas.transparent=true;assert.deepEqual(transparent.config,expected);assert.deepEqual(transparent.hitAreas,opaque.hitAreas);assert.equal(transparent.editingTime,opaque.editingTime);assert.equal(transparent.duration,opaque.duration);
+ for(let i=0;i<opaque.people.length;i++){assert.equal(transparent.people[i].brush,opaque.people[i].brush);assert.deepEqual(transparent.people[i].plan,opaque.people[i].plan);assert.deepEqual(transparent.people[i].config,opaque.people[i].config);assert.deepEqual(transparent.people[i].center,opaque.people[i].center);assert.equal(transparent.people[i].scale,opaque.people[i].scale);}
+});
+
+test('ornament thumbnails clear reused canvases and keep their real geometry when transparency changes',()=>{
+ const c=fixture(),r=recording(),person=c.people[0];
+ renderDecorationThumbnail(r.canvas,'face-sleepy',person,c.canvas.background,false);const opaque=r.context.fills.map(fill=>({color:fill.color,commands:fill.commands})),before=r.context.fills.length;
+ renderDecorationThumbnail(r.canvas,'face-sleepy',person,c.canvas.background,true);assert.deepEqual(r.context.fills.slice(before).map(fill=>({color:fill.color,commands:fill.commands})),opaque);assert.equal(r.context.backgrounds.length,1);assert.equal(r.context.clears.length,2);
+ renderDecorationThumbnail(r.canvas,'none',person,c.canvas.background,true);assert.equal(r.context.clears.length,3);assert.equal(r.context.backgrounds.length,1);assert.equal(r.context.fills.length,before*2);assert.ok(r.requests.every(request=>request.options?.alpha===true));
 });
 
 test('writing and short ornament reaction meet the outro directly without a full-ink blackout',()=>{

@@ -59,7 +59,10 @@ export async function checkExportSupport(input:WebConfig,audioFile?:File|null):P
 export async function exportVideo(input:WebConfig,options:ExportOptions={}):Promise<Blob>{
   const {signal,audioFile,onProgress}=options;
   cancelled(signal);
-  const config=validateConfig(input);
+  // H.264 has no alpha channel: render onto the user's retained background
+  // even if this API is called with a transparent GIF design.
+  const config=validateConfig(structuredClone(input));
+  config.canvas.transparent=false;
   onProgress?.(0,'检查导出能力');
   const support=await withCancellation(detectSupport(config,!!audioFile),signal);
   cancelled(signal);

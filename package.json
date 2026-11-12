@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "description": "原创连笔签名与情侣动态签名，纯浏览器设计与 MP4 导出。",
+  "description": "原创连笔签名与情侣动态签名，纯浏览器设计、MP4 与透明 GIF 导出。",
   "engines": {
     "node": ">=22.14 <25"
   },
@@ -17,6 +17,7 @@
     "test": "tsx --test tests/web-*.test.ts tests/config.test.ts tests/motion.test.ts tests/brush.test.ts"
   },
   "dependencies": {
+    "gifenc": "1.0.3",
     "mediabunny": "1.56.1",
     "react": "19.1.1",
     "react-dom": "19.1.1",

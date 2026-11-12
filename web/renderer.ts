@@ -238,10 +238,10 @@ function drawDecoration(context:CanvasRenderingContext2D,scene:Pick<PreparedScen
 }
 
 /** Catalog previews paint the actual ornament at its completed, resting pose. */
-export function renderDecorationThumbnail(canvas:HTMLCanvasElement,id:string,source:PersonConfig,background:string):void{
- const context=canvas.getContext('2d',{alpha:false});if(!context)return;
+export function renderDecorationThumbnail(canvas:HTMLCanvasElement,id:string,source:PersonConfig,background:string,transparent=false):void{
+ const context=canvas.getContext('2d',{alpha:true});if(!context)return;
  const width=canvas.width,height=canvas.height;
- context.setTransform(1,0,0,1,0,0);context.globalAlpha=1;context.globalCompositeOperation='source-over';context.shadowBlur=0;context.fillStyle=background;context.fillRect(0,0,width,height);
+ context.setTransform(1,0,0,1,0,0);context.globalAlpha=1;context.globalCompositeOperation='source-over';context.shadowBlur=0;context.clearRect(0,0,width,height);if(!transparent){context.fillStyle=background;context.fillRect(0,0,width,height);}
  if(!isDecorationId(id)||id==='none'||width<=0||height<=0)return;
  const config=defaultWebConfig();config.animation.introOutroEnabled=false;
  const person=effectivePerson(source,false);person.decoration={...person.decoration,id,offsetX:0,offsetY:0};
@@ -273,9 +273,9 @@ function drawEffects(context:CanvasRenderingContext2D,scene:PreparedScene,time:n
  for(const group of scene.people){const amount=smooth((time-group.plan.writing.end)/.6)*effects.intensity;if(amount<=0)continue;const b=group.brush.box,w=b.maxX-b.minX,h=b.maxY-b.minY,points=[{x:b.minX-w*.08,y:b.minY-h*.22},{x:b.maxX+w*.11,y:b.minY-h*.35},{x:b.minX+w*.47,y:b.minY-h*.55}];context.save();context.translate(group.tx,group.ty);context.rotate(group.angle);context.scale(group.scale,group.scale);for(let i=0;i<points.length;i++){const p=points[i],pulse=((Math.sin(time*(1.3+i*.17)+i*2.1+group.index*.7)+1)/2)**2,r=240*(.008+.005*pulse);context.globalAlpha=amount*(.13+.37*pulse);context.fillStyle=['#ffd1e3','#fff9ff','#c8d8ff'][i];context.shadowColor=context.fillStyle;context.shadowBlur=240*.025*group.scale;context.beginPath();context.moveTo(p.x-r,p.y);context.quadraticCurveTo(p.x,p.y,p.x,p.y-r*1.5);context.quadraticCurveTo(p.x,p.y,p.x+r,p.y);context.quadraticCurveTo(p.x,p.y,p.x,p.y+r*1.5);context.quadraticCurveTo(p.x,p.y,p.x-r,p.y);context.fill();}context.restore();}
 }
 export function renderScene(canvas:HTMLCanvasElement,scene:PreparedScene,time:number,complete=false):void{
- if(canvas.width!==scene.width)canvas.width=scene.width;if(canvas.height!==scene.height)canvas.height=scene.height;const context=canvas.getContext('2d',{alpha:false});if(!context)throw new Error('当前浏览器无法创建签名画布，请换用系统浏览器。');const t=complete?scene.editingTime:clamp(Number.isFinite(time)?time:0,0,scene.duration);
+ if(canvas.width!==scene.width)canvas.width=scene.width;if(canvas.height!==scene.height)canvas.height=scene.height;const context=canvas.getContext('2d',{alpha:true});if(!context)throw new Error('当前浏览器无法创建签名画布，请换用系统浏览器。');const t=complete?scene.editingTime:clamp(Number.isFinite(time)?time:0,0,scene.duration);
  const enabled=scene.config.animation.introOutroEnabled;
- context.setTransform(1,0,0,1,0,0);context.globalAlpha=1;context.globalCompositeOperation='source-over';context.shadowBlur=0;context.fillStyle=scene.config.canvas.background;context.fillRect(0,0,scene.width,scene.height);
+ context.setTransform(1,0,0,1,0,0);context.globalAlpha=1;context.globalCompositeOperation='source-over';context.shadowBlur=0;context.clearRect(0,0,scene.width,scene.height);if(!scene.config.canvas.transparent){context.fillStyle=scene.config.canvas.background;context.fillRect(0,0,scene.width,scene.height);}
  if(enabled&&scene.continuous){drawContinuousInk(context,scene.continuous,t,scene.duration);if(!complete)drawContinuousParticles(context,scene.continuous,t,scene.duration);return;}
  for(const group of scene.people){context.save();context.translate(group.tx,group.ty);context.rotate(group.angle);context.scale(group.scale,group.scale);drawBrush(context,group,t);context.restore();drawDecoration(context,scene,group,t);}
 }

@@ -24,7 +24,7 @@ export const webSchema = z.object({
   version:z.literal(2),
   mode:z.enum(['single','couple']),
   people:z.tuple([personSchema,personSchema]),
-  canvas:z.object({aspect:z.enum(['landscape','portrait','square']),background:color}),
+  canvas:z.object({aspect:z.enum(['landscape','portrait','square']),background:color,transparent:z.boolean().default(false)}),
   timing:z.object({duration:finite(3,15),writingRatio:finite(.35,.8),hold:finite(.2,3)}),
   animation:z.object({introOutroEnabled:z.boolean().default(true)}).strict().default({introOutroEnabled:true}),
   effects:z.object({sparkles:z.boolean(),hearts:z.boolean(),intensity:finite(0,1)}),
@@ -100,6 +100,6 @@ export function asBrushConfig(person:PersonConfig,web:WebConfig):SignatureConfig
   return {schemaVersion:1,name:person.name,font:{...font,id:'tyx-brush',weight:400},ink:person.ink,glow:person.glow,
     decoration:{...person.decoration,id:legacyDecoration,offsetX:0,offsetY:0},underline:person.underline,comet:person.comet,
     timing:{mode:'duration',durationSeconds:web.timing.duration,speed:1},canvas:{...canvasSize(web.canvas.aspect),fps:30},
-    background:{mode:'solid',color:web.canvas.background},seed:7};
+    background:{mode:web.canvas.transparent?'transparent':'solid',color:web.canvas.background},seed:7};
 }
 export const clamp=(n:number,min:number,max:number)=>Math.max(min,Math.min(max,n));
